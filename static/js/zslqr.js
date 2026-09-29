@@ -1,24 +1,29 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-function getNavOffset() {
-  const header = $('.site-header');
-  const cssValue = getComputedStyle(document.documentElement).getPropertyValue('--nav-height');
-  const cssHeight = Number.parseFloat(cssValue) || 0;
-  const actualHeight = header?.getBoundingClientRect().height || 0;
-  return Math.max(cssHeight, actualHeight);
-}
+function initRail() {
+  const rail = $('.rail');
+  const toggle = $('.rail-toggle');
+  const backdrop = $('.rail-backdrop');
 
-function initNav() {
-  const toggle = $('.nav-toggle');
-  const links = $('[data-nav-links]');
+  const closeRail = () => {
+    rail?.classList.remove('open');
+    backdrop?.classList.remove('open');
+    toggle?.setAttribute('aria-expanded', 'false');
+  };
+  const openRail = () => {
+    rail?.classList.add('open');
+    backdrop?.classList.add('open');
+    toggle?.setAttribute('aria-expanded', 'true');
+  };
+
   toggle?.addEventListener('click', () => {
-    const open = links.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', String(open));
+    rail?.classList.contains('open') ? closeRail() : openRail();
   });
+  backdrop?.addEventListener('click', closeRail);
 
-  const navLinks = $$('.nav-links a');
-  const progress = $('.scroll-progress span');
+  const navLinks = $$('.rail nav a');
+  const progress = $('.reading-progress span');
   const sections = navLinks.map(a => $(a.getAttribute('href'))).filter(Boolean);
 
   const onScroll = () => {
@@ -27,9 +32,8 @@ function initNav() {
     if (progress) progress.style.width = `${Math.max(0, Math.min(100, percent))}%`;
 
     let active = sections[0]?.id;
-    const activeOffset = getNavOffset() + 70;
     for (const section of sections) {
-      if (section.getBoundingClientRect().top <= activeOffset) active = section.id;
+      if (section.getBoundingClientRect().top <= 120) active = section.id;
     }
     navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${active}`));
   };
@@ -43,12 +47,11 @@ function initNav() {
     const target = href && href !== '#' ? $(href) : null;
     if (!target) return;
     event.preventDefault();
-    const top = target.getBoundingClientRect().top + window.scrollY - getNavOffset();
+    const top = target.getBoundingClientRect().top + window.scrollY - 16;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     history.pushState(null, '', href);
-    links?.classList.remove('open');
-    toggle?.setAttribute('aria-expanded', 'false');
+    closeRail();
   });
 }
 
-document.addEventListener('DOMContentLoaded', initNav);
+document.addEventListener('DOMContentLoaded', initRail);
