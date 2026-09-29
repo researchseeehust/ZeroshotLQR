@@ -10,7 +10,7 @@
     content="Zero-shot reinforcement learning, Linear quadratic regulator, Successor features, Adaptive dynamic programming, Data-driven control, Persistency of excitation">
   <title>Zero-Shot LQR | Structured Successor Features</title>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="./static/css/zslqr.css">
 
@@ -23,278 +23,291 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header" aria-label="Primary navigation">
-    <nav class="nav-shell">
-      <a class="brand" href="#top">
+  <div class="shell">
+    <div class="rail-backdrop"></div>
+    <aside class="rail" aria-label="Primary navigation">
+      <div class="rail-mark">
         <img src="./images/logobk.svg" alt="HUST">
-        <span class="brand-mark">ZS-LQR</span>
-      </a>
-      <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">&#9776;</button>
-      <div class="nav-links" data-nav-links>
-        <a href="#overview">Overview</a>
-        <a href="#method">Method</a>
-        <a href="#results">Results</a>
-        <a href="#citation">Citation</a>
+        <span>ZS&#8209;LQR</span>
       </div>
-    </nav>
-    <div class="scroll-progress" aria-hidden="true"><span></span></div>
-  </header>
 
-  <main id="main">
-    <section id="top" class="hero site-section">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-shell">
-        <h1>
-          Zero-Shot Linear Quadratic Regulation from Reward-Free Data:
-          Structured Successor Features with Stability and Finite-Sample Guarantees
-        </h1>
+      <div>
+        <p class="rail-kicker">Reward-free &rarr; Zero-shot</p>
+        <h2 class="rail-title">Zero-Shot Linear Quadratic Regulation</h2>
+        <ul class="rail-authors">
+          <li><a href="https://huy-quang-dao.github.io/">Quang Huy Dao</a></li>
+          <li><a href="https://www.linkedin.com/in/thaixuankhanh/">Khanh Thai</a></li>
+          <li><a href="mailto:nam.daophuong@hust.edu.vn">Phuong Nam Dao</a> &middot; corresponding</li>
+        </ul>
+        <p class="rail-affil">School of Electrical &amp; Electronic Engineering<br>Hanoi University of Science and Technology</p>
+      </div>
 
-        <p class="authors">
-          <a href="https://huy-quang-dao.github.io/">Quang Huy Dao</a><sup>1</sup>,
-          <a href="https://www.linkedin.com/in/thaixuankhanh/">Khanh Thai</a><sup>1</sup>,
-          <a href="mailto:nam.daophuong@hust.edu.vn">Phuong Nam Dao</a><sup>1,*</sup>
-        </p>
-        <p class="affiliations"><sup>1</sup>School of Electrical &amp; Electronic Engineering, Hanoi University of Science and Technology (HUST), Vietnam</p>
-        <p class="footnote"><sup>*</sup>Corresponding author</p>
+      <nav data-nav-links>
+        <a href="#top"><span class="n">00</span> Top</a>
+        <a href="#overview"><span class="n">01</span> Overview</a>
+        <a href="#method"><span class="n">02</span> Method</a>
+        <a href="#results"><span class="n">03</span> Results</a>
+        <a href="#citation"><span class="n">04</span> Citation</a>
+      </nav>
 
-        <div class="hero-logo">
-          <img src="./images/logobk.svg" alt="Hanoi University of Science and Technology">
-        </div>
+      <div class="rail-actions">
+        <a href="./paper.pdf" target="_blank" rel="noopener" class="btn primary">
+          <i class="fas fa-file-pdf"></i> Paper (PDF)
+        </a>
+        <span class="btn btn-disabled" aria-disabled="true" title="Code will be released alongside the journal submission">
+          <i class="fas fa-code"></i> Code <span class="badge-soon">Soon</span>
+        </span>
+      </div>
+    </aside>
 
-        <div class="hero-actions">
-          <a href="./paper.pdf" target="_blank" rel="noopener" class="btn primary">
-            <span class="icon"><i class="fas fa-file-pdf"></i></span> Paper
-          </a>
-          <span class="btn btn-disabled" aria-disabled="true" title="Code will be released alongside the journal submission">
-            <span class="icon"><i class="fas fa-code"></i></span> Code
-            <span class="badge-soon">Coming soon</span>
-          </span>
-        </div>
+    <button class="rail-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+      <i class="fas fa-bars"></i> Menu
+    </button>
 
-        <div class="metric-chips" aria-label="Key facts">
-          <span>Exact for noise-free PE data</span>
-          <span>Zero-iteration SF-GPI</span>
-          <span>0.4&nbsp;ms test-time, independent of N</span>
-          <span>$O(\sigma_w\sqrt{\log(1/\delta)/(N\lambda_{\mathrm{PE}})})$ suboptimality</span>
-        </div>
+    <main id="main" class="article">
+      <div class="reading-progress" aria-hidden="true"><span></span></div>
 
-        <div class="hero-visual">
-          <figure class="card">
-            <img src="./images/e1_convergence.png"
-              alt="Relative gain error of the data-free test-time policy iteration for 200 random tasks from one reward-free dataset, converging to machine precision within about five iterations">
+      <section id="top" class="site-section titleblock">
+        <div class="col">
+          <p class="kicker"><span class="num">2026</span> &middot; Preprint</p>
+          <h1>
+            Zero-Shot Linear Quadratic Regulation from Reward-Free Data:
+            Structured Successor Features with Stability and Finite-Sample Guarantees
+          </h1>
+          <p class="dek">
+            One reward-free dataset, collected once. Every linear-quadratic task afterwards is solved in closed
+            form &mdash; no replanning, no revisiting the data, no neural approximation.
+          </p>
+
+          <div class="title-actions">
+            <a href="./paper.pdf" target="_blank" rel="noopener" class="btn primary">
+              <i class="fas fa-file-pdf"></i> Read the paper
+            </a>
+            <a href="#method" class="btn"><i class="fas fa-project-diagram"></i> See the method</a>
+          </div>
+
+          <div class="stat-strip" aria-label="Key facts">
+            <div class="stat"><b>Exact</b><span>for noise-free persistently-exciting data</span></div>
+            <div class="stat"><b>0 iters</b><span>zero-iteration SF-GPI at test time</span></div>
+            <div class="stat"><b>0.4&nbsp;ms</b><span>test-time cost, independent of $N$</span></div>
+            <div class="stat"><b>$O(\sigma_w\sqrt{\log(1/\delta)/(N\lambda_{\mathrm{PE}})})$</b><span>uniform finite-sample suboptimality</span></div>
+          </div>
+
+          <figure class="lead-figure">
+            <div class="figure-frame">
+              <img src="./images/e1_convergence.png"
+                alt="Relative gain error of the data-free test-time policy iteration for 200 random tasks from one reward-free dataset, converging to machine precision within about five iterations">
+            </div>
             <figcaption>
+              <span class="cap-label">Figure &mdash; E1</span>
               200 random tasks, one reward-free dataset ($N=200$): the data-free test-time policy iteration
               collapses to machine precision ($5.6\times10^{-14}$) in about 5 iterations &mdash; with no further
               access to the data or the plant.
             </figcaption>
           </figure>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section id="overview" class="section-pad content-grid site-section">
-      <div class="section-heading">
-        <p class="eyebrow">Overview</p>
-        <h2>Reward-free data, once. Any LQR task, instantly.</h2>
-        <p class="section-lede">
-          Classical RL and adaptive dynamic programming for the linear quadratic regulator solve one performance
-          index at a time: change the weights $(Q,R)$ and the whole policy iteration must be rerun on stored, or
-          freshly collected, data. We bring zero-shot reinforcement learning to LQR: for linear systems with
-          quadratic costs, the successor features of every linear policy are exact quadratic forms, and a
-          fixed-size second-moment statistic of reward-free data is a sufficient representation to solve every
-          task &mdash; exactly, without touching the data again.
-        </p>
-      </div>
+      <section id="overview" class="section-pad site-section">
+        <div class="col">
+          <p class="kicker"><span class="num">01</span> Overview</p>
+          <h2>Reward-free data, once. Any LQR task, instantly.</h2>
+          <p class="lede">
+            Classical RL and adaptive dynamic programming for the linear quadratic regulator solve one performance
+            index at a time: change the weights $(Q,R)$ and the whole policy iteration must be rerun on stored, or
+            freshly collected, data. We bring zero-shot reinforcement learning to LQR: for linear systems with
+            quadratic costs, the successor features of every linear policy are exact quadratic forms, and a
+            fixed-size second-moment statistic of reward-free data is a sufficient representation to solve every
+            task &mdash; exactly, without touching the data again.
+          </p>
 
-      <div class="overview-cards">
-        <article class="card">
-          <span class="card-icon" style="background: linear-gradient(135deg,#2f6fb0,#4fb3d9);"><i class="fas fa-cube"></i></span>
-          <h3>Exact Structured Successor Features</h3>
-          <p>Every linear policy's successor features are exact quadratic forms, and the map from a task
-            $(Q,R)$ to its Q-function kernel is a closed-form, task-linear successor operator $\mathcal{L}_K$
-            &mdash; no neural approximation needed.</p>
-        </article>
-        <article class="card">
-          <span class="card-icon" style="background: linear-gradient(135deg,#7b4fb0,#b083e0);"><i class="fas fa-layer-group"></i></span>
-          <h3>Two-Phase Zero-Shot Algorithm</h3>
-          <p>An offline phase compresses arbitrary reward-free trajectories into a fixed-size representation;
-            a test-time phase maps any task &mdash; weights or noisy reward labels &mdash; to a gain via a
-            data-free policy iteration, or with zero iterations via successor-feature GPI.</p>
-        </article>
-        <article class="card">
-          <span class="card-icon" style="background: linear-gradient(135deg,#c07a1e,#e0aa5c);"><i class="fas fa-shield-halved"></i></span>
-          <h3>Provable Guarantees</h3>
-          <p>Noise-free PE data give exactly Riccati-optimal gains for all tasks at once; SF-GPI is exponentially
-            stabilizing and never worse than the best library policy; sub-Gaussian noise gives a uniform,
-            data-computable suboptimality certificate.</p>
-        </article>
-        <article class="card">
-          <span class="card-icon" style="background: linear-gradient(135deg,#1e8a72,#4fc2a3);"><i class="fas fa-flask"></i></span>
-          <h3>Validated on an Unstable Batch Reactor</h3>
-          <p>Machine-precision exactness over 200 random tasks from one dataset; test-time cost of $0.4\,$ms
-            independent of data length, versus $14$&ndash;$359\,$ms for per-task off-policy Q-learning; a
-            continuous-time extension and robustness to noisy reward labels.</p>
-        </article>
-      </div>
-    </section>
+          <div class="contrib-list">
+            <div class="contrib-item">
+              <span class="idx">01</span>
+              <div>
+                <h3>Exact structured successor features</h3>
+                <p>Every linear policy's successor features are exact quadratic forms, and the map from a task
+                  $(Q,R)$ to its Q-function kernel is a closed-form, task-linear successor operator $\mathcal{L}_K$
+                  &mdash; no neural approximation needed.</p>
+              </div>
+            </div>
+            <div class="contrib-item">
+              <span class="idx">02</span>
+              <div>
+                <h3>Two-phase zero-shot algorithm</h3>
+                <p>An offline phase compresses arbitrary reward-free trajectories into a fixed-size representation;
+                  a test-time phase maps any task &mdash; weights or noisy reward labels &mdash; to a gain via a
+                  data-free policy iteration, or with zero iterations via successor-feature GPI.</p>
+              </div>
+            </div>
+            <div class="contrib-item">
+              <span class="idx">03</span>
+              <div>
+                <h3>Provable guarantees</h3>
+                <p>Noise-free PE data give exactly Riccati-optimal gains for all tasks at once; SF-GPI is exponentially
+                  stabilizing and never worse than the best library policy; sub-Gaussian noise gives a uniform,
+                  data-computable suboptimality certificate.</p>
+              </div>
+            </div>
+            <div class="contrib-item">
+              <span class="idx">04</span>
+              <div>
+                <h3>Validated on an unstable batch reactor</h3>
+                <p>Machine-precision exactness over 200 random tasks from one dataset; test-time cost of $0.4\,$ms
+                  independent of data length, versus $14$&ndash;$359\,$ms for per-task off-policy Q-learning; a
+                  continuous-time extension and robustness to noisy reward labels.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <section id="method" class="section-pad content-grid site-section">
-      <div class="section-heading">
-        <p class="eyebrow">Method</p>
-        <h2>One reward-free dataset, compressed once; any task, mapped in closed form.</h2>
-        <p class="section-lede">
-          The offline phase accumulates second moments of reward-free, off-policy trajectories and, optionally, a
-          small library of successor operators for anchor tasks. At test time, any task &mdash; revealed as
-          weights $(Q,R)$ or through reward labels &mdash; is mapped to a stabilizing gain by a data-free policy
-          iteration in representation space (Mode PI), or with no iteration at all by successor-feature
-          generalized policy improvement over the library (Mode GPI).
-        </p>
-      </div>
+      <section id="method" class="section-pad site-section">
+        <div class="col">
+          <p class="kicker"><span class="num">02</span> Method</p>
+          <h2>One reward-free dataset, compressed once; any task, mapped in closed form.</h2>
+          <p class="lede">
+            The offline phase accumulates second moments of reward-free, off-policy trajectories and, optionally, a
+            small library of successor operators for anchor tasks. At test time, any task &mdash; revealed as
+            weights $(Q,R)$ or through reward labels &mdash; is mapped to a stabilizing gain by a data-free policy
+            iteration in representation space (Mode PI), or with no iteration at all by successor-feature
+            generalized policy improvement over the library (Mode GPI).
+          </p>
+        </div>
 
-      <figure class="pipeline-figure card">
-        <a href="./images/framework_diagram.png" target="_blank" rel="noopener" title="Open the diagram at full size">
-          <img src="./images/framework_diagram.png"
-            alt="Zero-shot LQR pipeline: an offline phase compresses reward-free data into a fixed-size representation and an SF library; a test-time phase maps any task to a gain via Mode PI or Mode GPI, with no data access or interaction">
-        </a>
-        <figcaption>
-          <strong>Zero-shot LQR.</strong> The offline phase compresses reward-free data into a fixed-size
-          representation $(\hat\Sigma_{zz},\hat\Sigma_{x^+z})$ and, optionally, an SF library. At test time any
-          task is mapped to a gain without touching the data or the plant. <em>Click to open full size.</em>
-        </figcaption>
-      </figure>
+        <div class="col-wide">
+          <figure class="lead-figure">
+            <a href="./images/framework_diagram.png" target="_blank" rel="noopener" title="Open the diagram at full size">
+              <div class="figure-frame">
+                <img src="./images/framework_diagram.png"
+                  alt="Zero-shot LQR pipeline: an offline phase compresses reward-free data into a fixed-size representation and an SF library; a test-time phase maps any task to a gain via Mode PI or Mode GPI, with no data access or interaction">
+              </div>
+            </a>
+            <figcaption>
+              <span class="cap-label">Figure &mdash; pipeline</span>
+              <strong>Zero-shot LQR.</strong> The offline phase compresses reward-free data into a fixed-size
+              representation $(\hat\Sigma_{zz},\hat\Sigma_{x^+z})$ and, optionally, an SF library. At test time any
+              task is mapped to a gain without touching the data or the plant. <em>Click to open full size.</em>
+            </figcaption>
+          </figure>
+        </div>
 
-      <div class="card theorem-card">
-        <p class="theorem-title"><i class="fas fa-shield-halved"></i> Theorem (Uniform zero-shot guarantee)</p>
-        <p>
-          Under sub-Gaussian process noise, with probability at least $1-\delta$ &mdash; from a single
-          probabilistic event, with no union bound over tasks &mdash; the gains returned by Mode PI are
-          stabilizing and their relative suboptimality is bounded, uniformly over a compact task set $\mathcal{W}$,
-          by $O\!\big(\sigma_w\sqrt{\log(1/\delta)/(N\lambda_{\mathrm{PE}})}\big)$. A data-computable certificate,
-          evaluated from the representation alone, verifies stability and suboptimality for each individual task.
-        </p>
-      </div>
-    </section>
+        <div class="col">
+          <div class="theorem">
+            <p class="cap-label"><i class="fas fa-shield-alt"></i> Theorem &mdash; uniform zero-shot guarantee</p>
+            <p>
+              Under sub-Gaussian process noise, with probability at least $1-\delta$ &mdash; from a single
+              probabilistic event, with no union bound over tasks &mdash; the gains returned by Mode PI are
+              stabilizing and their relative suboptimality is bounded, uniformly over a compact task set $\mathcal{W}$,
+              by $O\!\big(\sigma_w\sqrt{\log(1/\delta)/(N\lambda_{\mathrm{PE}})}\big)$. A data-computable certificate,
+              evaluated from the representation alone, verifies stability and suboptimality for each individual task.
+            </p>
+          </div>
+        </div>
+      </section>
 
-    <section id="results" class="section-pad content-grid site-section">
-      <div class="section-heading">
-        <p class="eyebrow">Results</p>
-        <h2>Machine-precision exactness, constant test-time cost, robust finite-sample rates.</h2>
-        <p class="section-lede">
-          On Rosenbrock's open-loop-unstable batch reactor ($n=4$, $m=2$), a single reward-free dataset solves 200
-          random LQR tasks to machine precision; SF-GPI closes most of the optimality gap with no test-time
-          equation solving; and the predicted $1/N$ sample-complexity rate is confirmed across three excitation
-          levels.
-        </p>
-      </div>
+      <section id="results" class="section-pad site-section">
+        <div class="col-wide">
+          <div class="col" style="width:100%; margin:0 0 1.5rem;">
+            <p class="kicker"><span class="num">03</span> Results</p>
+            <h2>Machine-precision exactness, constant test-time cost, robust finite-sample rates.</h2>
+            <p class="lede">
+              On Rosenbrock's open-loop-unstable batch reactor ($n=4$, $m=2$), a single reward-free dataset solves 200
+              random LQR tasks to machine precision; SF-GPI closes most of the optimality gap with no test-time
+              equation solving; and the predicted $1/N$ sample-complexity rate is confirmed across three excitation
+              levels.
+            </p>
+          </div>
 
-      <div class="gallery-grid">
-        <figure>
-          <img src="./images/e1_convergence.png" alt="E1: quadratic convergence of test-time Mode PI for 200 random tasks">
-          <figcaption>E1 &mdash; quadratic convergence for 200 tasks (max. error $5.6\times10^{-14}$)</figcaption>
-        </figure>
-        <figure>
-          <img src="./images/e3_gpi.png" alt="E3: zero-iteration SF-GPI versus the best single library policy">
-          <figcaption>E3 &mdash; zero-iteration SF-GPI vs. best library policy</figcaption>
-        </figure>
-        <figure class="span-2">
-          <img src="./images/e2_sample_complexity.png"
-            alt="E2: representation error decaying as N to the power minus one half, and worst- and median-task relative suboptimality decaying with slope close to minus one, across three persistency-of-excitation levels">
-          <figcaption>E2 &mdash; (a) representation error $\|\hat\Theta-\Theta\|$ decays as $N^{-1/2}$ and tracks
-            the high-probability bound; (b) worst- and median-task relative suboptimality decays with slope
-            $\approx -1$ (the quadratic regime), across three PE levels.</figcaption>
-        </figure>
-        <figure class="span-2">
-          <img src="./images/e4_continuous.png"
-            alt="E4: continuous-time extension, data-free Kleinman iteration for 50 tasks, and closed-loop responses for three tasks computed from the same data">
-          <figcaption>E4 (CT) &mdash; (a) the data-free Kleinman iteration converges quadratically for 50 tasks
-            from one stabilizing gain and one dataset; (b) closed-loop responses for three very different tasks,
-            all computed from the same integral data.</figcaption>
-        </figure>
-      </div>
+          <div class="gallery">
+            <figure>
+              <div class="figure-frame"><img src="./images/e1_convergence.png" alt="E1: quadratic convergence of test-time Mode PI for 200 random tasks"></div>
+              <figcaption><span class="cap-label">E1</span>Quadratic convergence for 200 tasks (max. error $5.6\times10^{-14}$)</figcaption>
+            </figure>
+            <figure>
+              <div class="figure-frame"><img src="./images/e3_gpi.png" alt="E3: zero-iteration SF-GPI versus the best single library policy"></div>
+              <figcaption><span class="cap-label">E3</span>Zero-iteration SF-GPI vs. best library policy</figcaption>
+            </figure>
+            <figure class="span-2">
+              <div class="figure-frame">
+                <img src="./images/e2_sample_complexity.png"
+                  alt="E2: representation error decaying as N to the power minus one half, and worst- and median-task relative suboptimality decaying with slope close to minus one, across three persistency-of-excitation levels">
+              </div>
+              <figcaption><span class="cap-label">E2</span>(a) representation error $\|\hat\Theta-\Theta\|$ decays as $N^{-1/2}$ and tracks
+                the high-probability bound; (b) worst- and median-task relative suboptimality decays with slope
+                $\approx -1$ (the quadratic regime), across three PE levels.</figcaption>
+            </figure>
+            <figure class="span-2">
+              <div class="figure-frame">
+                <img src="./images/e4_continuous.png"
+                  alt="E4: continuous-time extension, data-free Kleinman iteration for 50 tasks, and closed-loop responses for three tasks computed from the same data">
+              </div>
+              <figcaption><span class="cap-label">E4 (CT)</span>(a) the data-free Kleinman iteration converges quadratically for 50 tasks
+                from one stabilizing gain and one dataset; (b) closed-loop responses for three very different tasks,
+                all computed from the same integral data.</figcaption>
+            </figure>
+          </div>
 
-      <div class="card table-card">
-        <p style="text-align:center; color: var(--muted); margin: 0 0 1rem;">
-          E1 &mdash; per-task test-time cost versus per-task off-policy Q-learning on the same reward-free data
-          (mean over 20 tasks):
-        </p>
-        <table>
-          <thead>
-            <tr>
-              <th>$N$</th>
-              <th>Offline (ms)</th>
-              <th>Zero-shot (ms)</th>
-              <th>Off-policy QL (ms)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>200</td><td>0.05</td><td>0.37</td><td>14.5</td>
-            </tr>
-            <tr>
-              <td>1000</td><td>0.08</td><td>0.39</td><td>73.3</td>
-            </tr>
-            <tr class="highlight-row">
-              <td>5000</td><td>0.14</td><td>0.39</td><td>358.5</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">
-        The zero-shot test-time cost stays flat at $\sim\!0.4\,$ms as $N$ grows $25\times$, while per-task
-        off-policy Q-learning on the same data grows linearly with $N$; the two methods return the same gains to
-        within $2.2\times10^{-13}$&ndash;$1.4\times10^{-12}$.
-      </p>
+          <div class="data-table">
+            <p class="cap-label">Table &mdash; E1, per-task test-time cost vs. per-task off-policy Q-learning on the same reward-free data (mean over 20 tasks)</p>
+            <table>
+              <thead>
+                <tr><th>$N$</th><th>Offline (ms)</th><th>Zero-shot (ms)</th><th>Off-policy QL (ms)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>200</td><td>0.05</td><td>0.37</td><td>14.5</td></tr>
+                <tr><td>1000</td><td>0.08</td><td>0.39</td><td>73.3</td></tr>
+                <tr class="highlight-row"><td>5000</td><td>0.14</td><td>0.39</td><td>358.5</td></tr>
+              </tbody>
+            </table>
+            <p class="table-note">
+              The zero-shot test-time cost stays flat at $\sim\!0.4\,$ms as $N$ grows $25\times$, while per-task
+              off-policy Q-learning on the same data grows linearly with $N$; the two methods return the same gains to
+              within $2.2\times10^{-13}$&ndash;$1.4\times10^{-12}$.
+            </p>
+          </div>
 
-      <div class="card table-card">
-        <p style="text-align:center; color: var(--muted); margin: 0 0 1rem;">
-          E5 &mdash; task inference from noisy reward labels instead of $(Q,R)$ (50 tasks, $N=1000$):
-        </p>
-        <table>
-          <thead>
-            <tr>
-              <th>Label noise</th>
-              <th>Median weight error</th>
-              <th>Median subopt.</th>
-              <th>Worst subopt.</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="highlight-row">
-              <td>0%</td><td>$1.7\times10^{-14}$</td><td>$\approx 0$</td><td>$3.3\times10^{-14}$</td>
-            </tr>
-            <tr>
-              <td>1%</td><td>0.020</td><td>$4.6\times10^{-5}$</td><td>$3.0\times10^{-3}$</td>
-            </tr>
-            <tr>
-              <td>10%</td><td>0.204</td><td>$5.5\times10^{-3}$</td><td>0.168</td>
-            </tr>
-            <tr>
-              <td>100%</td><td>2.12</td><td>0.191</td><td>1.76</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">
-        Noise-free labels identify the task weights exactly; even $1\%$ label noise leaves the median
-        suboptimality at $4.6\times10^{-5}$ &mdash; the LQR solution is insensitive to moderate weight errors, so
-        reward-label task specification is practical.
-      </p>
-    </section>
+          <div class="data-table">
+            <p class="cap-label">Table &mdash; E5, task inference from noisy reward labels instead of $(Q,R)$ (50 tasks, $N=1000$)</p>
+            <table>
+              <thead>
+                <tr><th>Label noise</th><th>Median weight error</th><th>Median subopt.</th><th>Worst subopt.</th></tr>
+              </thead>
+              <tbody>
+                <tr class="highlight-row"><td>0%</td><td>$1.7\times10^{-14}$</td><td>$\approx 0$</td><td>$3.3\times10^{-14}$</td></tr>
+                <tr><td>1%</td><td>0.020</td><td>$4.6\times10^{-5}$</td><td>$3.0\times10^{-3}$</td></tr>
+                <tr><td>10%</td><td>0.204</td><td>$5.5\times10^{-3}$</td><td>0.168</td></tr>
+                <tr><td>100%</td><td>2.12</td><td>0.191</td><td>1.76</td></tr>
+              </tbody>
+            </table>
+            <p class="table-note">
+              Noise-free labels identify the task weights exactly; even $1\%$ label noise leaves the median
+              suboptimality at $4.6\times10^{-5}$ &mdash; the LQR solution is insensitive to moderate weight errors, so
+              reward-label task specification is practical.
+            </p>
+          </div>
+        </div>
+      </section>
 
-    <section id="citation" class="section-pad content-grid site-section">
-      <div class="section-heading">
-        <p class="eyebrow">Citation</p>
-        <h2>Cite this work</h2>
-      </div>
-      <article class="card citation-card">
-        <pre><code>@misc{dao2026zeroshotlqr,
+      <section id="citation" class="section-pad site-section">
+        <div class="col">
+          <p class="kicker"><span class="num">04</span> Citation</p>
+          <h2>Cite this work</h2>
+          <div class="citation-block">
+            <pre><code>@misc{dao2026zeroshotlqr,
   title={Zero-Shot Linear Quadratic Regulation from Reward-Free Data: Structured Successor Features with Stability and Finite-Sample Guarantees},
   author={Dao, Quang Huy and Thai, Khanh and Dao, Phuong Nam},
   year={2026}
 }</code></pre>
-      </article>
-    </section>
-  </main>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="col">Hanoi University of Science and Technology &middot; 2026</div>
+      </footer>
+    </main>
+  </div>
 
   <script src="./static/js/zslqr.js" defer></script>
 </body>
