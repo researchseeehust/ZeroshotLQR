@@ -29,6 +29,7 @@
       <a class="brand" href="#top"><img src="./images/vinmotion_logo.jpg" alt="VinMotion">ZS&#8209;LQR</a>
       <a class="nl" href="#overview">Overview</a>
       <a class="nl" href="#method">Method</a>
+      <a class="nl" href="#demo">MuJoCo</a>
       <a class="nl" href="#results">Results</a>
       <a class="nl" href="#citation">Citation</a>
     </div>
@@ -143,6 +144,35 @@
           evaluated from the representation alone, verifies stability and suboptimality for each individual task.
         </p>
       </div>
+    </section>
+
+    <section id="demo">
+      <h2>One dataset on a MuJoCo cart-pole, three controllers read out of it.</h2>
+      <p class="lead">
+        The offline phase sees the simulator once, through reward-free rollouts driven by random forces near the
+        upright equilibrium, and never touches it again. Every task $(Q,R)$ posed afterwards is turned into a gain
+        from the fixed-size representation alone, and that gain goes straight back into the nonlinear simulator.
+        No retuning, no new rollouts, no gradient steps between tasks.
+      </p>
+      <div class="specs">
+        <span class="spec">MuJoCo 3.9</span>
+        <span class="spec">cart-pole, n = 4, m = 1</span>
+        <span class="spec">50 Hz</span>
+        <span class="spec">4800 reward-free samples</span>
+        <span class="spec">0.55 ms / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_cartpole.gif"
+          alt="Three MuJoCo cart-pole simulations side by side, each balancing the pole with a different gain read out of the same reward-free representation">
+        <figcaption><span class="fnum">Demo</span>Same reward-free dataset, three different performance indices. Task&nbsp;2 weights cart position heavily and returns to the centre mark first; task&nbsp;3 buys a faster upright recovery with cheap control effort. Each gain is produced in about half a millisecond, with no access to the simulator or the data.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_cartpole.png"
+          alt="Three panels: pole angle and cart position for the three tasks in closed loop, and a histogram of the relative gain error over 200 random tasks">
+        <figcaption><span class="fnum">Fig. 3</span>(a) closed loop in the nonlinear simulator, against the uncontrolled fall; (b) the three tasks separate in how hard they pull the cart back to the centre; (c) over 200 random tasks drawn from the same representation, the zero-shot gain stays within $1.4\times10^{-3}$ relative error of the Riccati gain of MuJoCo's own finite-difference linearisation &mdash; which the algorithm never sees.</figcaption>
+      </figure>
     </section>
 
     <section id="results">
