@@ -164,13 +164,15 @@
     </section>
 
     <section id="demo">
-      <h2>One Dataset on a MuJoCo Cart-Pole, Three Controllers Read Out of It</h2>
+      <h2>One Dataset per System, Many Controllers Read Out of It</h2>
       <p class="lead">
-        The offline phase sees the simulator once, through reward-free rollouts driven by random forces near the
-        upright equilibrium. It never touches the simulator again. Every task $(Q,R)$ posed afterwards becomes a
-        gain computed from the fixed-size representation alone, and that gain goes straight back into the
-        nonlinear simulator. No retuning, no new rollouts, and no gradient steps separate one task from the next.
+        The offline phase sees the simulator once, through reward-free rollouts driven by random inputs near an
+        equilibrium. It never touches the simulator again. Every task $(Q,R)$ posed afterwards becomes a gain
+        computed from the fixed-size representation alone, and that gain goes straight back into the nonlinear
+        simulator. No retuning, no new rollouts, and no gradient steps separate one task from the next.
       </p>
+
+      <h3>Cart-Pole</h3>
       <div class="specs">
         <span class="spec">MuJoCo 3.9</span>
         <span class="spec">cart-pole, n = 4, m = 1</span>
@@ -189,6 +191,33 @@
         <img src="./images/mujoco_cartpole.png"
           alt="Three panels: pole angle and cart position for the three tasks in closed loop, and a histogram of the relative gain error over 200 random tasks">
         <figcaption><span class="fnum">Fig. 3</span>(a) the closed loop in the nonlinear simulator, next to the uncontrolled fall. (b) the three tasks separate in how hard they pull the cart back to the centre. (c) over 200 random tasks read out of the same representation, the zero-shot gain stays within $1.4\times10^{-3}$ relative error of the Riccati gain of MuJoCo's own finite-difference linearisation, which the algorithm never sees.</figcaption>
+      </figure>
+
+      <h3 style="margin-top:38px">Quadrotor at Hover</h3>
+      <p class="lead">
+        Hover is a harder case, and not only because the state is 12-dimensional with four inputs. The
+        equilibrium input is nonzero, since the rotors carry the weight. The representation is therefore built on
+        deviations from the trim point $(x^\star,u^\star)$. Regressing on raw states and inputs instead would
+        push the missing affine term into $\hat\Theta$ and bias it.
+      </p>
+      <div class="specs">
+        <span class="spec">quadrotor, n = 12, m = 4</span>
+        <span class="spec">0.52 kg</span>
+        <span class="spec">100 Hz</span>
+        <span class="spec">8400 reward-free samples</span>
+        <span class="spec">0.98 ms / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_quadrotor.gif"
+          alt="Three MuJoCo quadrotors side by side, each flying back to the same hover point with a different gain read out of the same reward-free representation">
+        <figcaption><span class="fnum">Demo</span>The quadrotor starts displaced and tilted, and returns to the marked hover point. Task&nbsp;1 weights position, so it tilts hard to get back quickly. Task&nbsp;2 weights attitude and keeps itself level, which costs it time. Task&nbsp;3 penalises thrust and spends a quarter of the control effort of task&nbsp;1, $0.025\,$N against $0.107\,$N of mean thrust deviation.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_quadrotor.png"
+          alt="Four panels: position error and tilt for three hover tasks, a histogram of relative gain error over 200 random tasks, and gain error against exploration amplitude with and without process noise">
+        <figcaption><span class="fnum">Fig. 4</span>(a) and (b) show the three tasks doing what their weights ask: the position-weighted gain tilts to $52^\circ$ to recover fast, while the attitude-weighted gain never exceeds $8^\circ$ and takes longer. (c) over 200 random tasks the median relative gain error is $6.8\times10^{-3}$. (d) the error against the exploration amplitude. With noise-free data the only error is the linearisation bias, which shrinks with the amplitude. Process noise pushes the other way, and the two effects meet at an interior optimum. The LTI theory covers the second effect; the first one comes from the simulator being nonlinear.</figcaption>
       </figure>
     </section>
 
