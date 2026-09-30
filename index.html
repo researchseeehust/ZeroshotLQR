@@ -39,7 +39,7 @@
     <div class="wrap">
       <span class="lockup"><img src="./images/vinmotion_logo.jpg" alt=""> Zero&#8209;Shot<span class="m">&nbsp;LQR</span></span>
       <h1>Zero-Shot Linear Quadratic Regulation from Reward-Free Data: Structured Successor Features with Stability and Finite-Sample Guarantees</h1>
-      <p class="tag">One reward-free dataset, collected once. Every linear-quadratic task afterwards is solved in closed form &mdash; no replanning, no revisiting the data, no neural approximation.</p>
+      <p class="tag">Collect one reward-free dataset. Solve every linear-quadratic task afterwards in closed form, with no replanning, no second pass over the data, and no neural approximation.</p>
 
       <p class="authors">
         <a href="https://huy-quang-dao.github.io/" target="_blank" rel="noopener">Quang Huy Dao</a><sup>1</sup>,
@@ -62,7 +62,7 @@
       <figure class="fig hero-fig">
         <img src="./images/e1_convergence.png"
           alt="Relative gain error of the data-free test-time policy iteration for 200 random tasks from one reward-free dataset, converging to machine precision within about five iterations">
-        <figcaption><span class="fnum">Fig. 1</span>200 random tasks, one reward-free dataset ($N=200$): the data-free test-time policy iteration collapses to machine precision ($5.6\times10^{-14}$) in about 5 iterations &mdash; with no further access to the data or the plant.</figcaption>
+        <figcaption><span class="fnum">Fig. 1</span>200 random tasks read out of one reward-free dataset ($N=200$). The data-free test-time policy iteration reaches machine precision ($5.6\times10^{-14}$) in about 5 iterations. It accesses neither the data nor the plant while doing so.</figcaption>
       </figure>
     </div>
   </header>
@@ -70,26 +70,42 @@
   <main id="main" class="wrap">
 
     <section id="overview">
-      <h2>Reward-free data, once. Any LQR task, instantly.</h2>
+      <h2>Reward-Free Data Once, Any LQR Task Instantly</h2>
       <div id="abstract">
         <p class="abstract">
           Classical RL and adaptive dynamic programming for the linear quadratic regulator solve one performance
-          index at a time: change the weights $(Q,R)$ and the whole policy iteration must be rerun on stored, or
-          freshly collected, data. We bring zero-shot reinforcement learning to LQR &mdash; a fixed-size statistic
-          of reward-free data solves every task afterwards, exactly, without touching the data again.
+          index at a time. Each change to the weights $(Q,R)$ forces another pass over the data and another policy
+          iteration. We bring zero-shot reinforcement learning to LQR. A fixed-size statistic of reward-free data
+          then solves every task exactly, without touching the data again.
         </p>
         <details class="more">
           <summary>Full abstract</summary>
           <p>
-            For linear systems with quadratic costs, the successor features of every linear policy are exact
-            quadratic forms, and a fixed-size second-moment statistic of reward-free, off-policy data is a
-            sufficient representation to solve every task. An offline phase compresses arbitrary trajectories into
-            this statistic and, optionally, a small library of successor operators for anchor tasks. At test time,
-            any task &mdash; revealed as weights $(Q,R)$ or through noisy reward labels &mdash; is mapped to a
-            stabilizing gain by a data-free policy iteration, or with zero iterations by successor-feature
-            generalized policy improvement. Under sub-Gaussian process noise, the returned gains are stabilizing
-            and their relative suboptimality is bounded uniformly over a compact task set, with no union bound
-            over tasks. We validate the approach on Rosenbrock's open-loop-unstable batch reactor.
+            Reinforcement learning (RL) and adaptive dynamic programming (ADP) algorithms for the linear quadratic
+            regulator (LQR) learn the optimal gain for <em>one</em> performance index. Each time the designer
+            changes the weights $(Q,R)$, these algorithms must re-collect or re-process data and re-run policy
+            iteration. Zero-shot RL instead learns a representation from reward-free interaction and reads out the
+            optimal policy for <em>any</em> reward revealed at test time, without further learning. Existing
+            zero-shot methods, however, rely on neural approximation and give no stability or optimality
+            guarantee. This paper brings zero-shot RL to linear optimal control. For linear systems with quadratic
+            costs, we show three facts. First, the successor features of every linear policy are exact quadratic
+            forms. Second, the map from $(Q,R)$ to the Q-function kernel is linear, with a closed-form successor
+            operator. Third, a fixed-size second-moment statistic of reward-free data is a sufficient zero-shot
+            representation. On this basis, we propose a zero-shot LQR algorithm for discrete-time systems. An
+            offline phase compresses arbitrary reward-free trajectories into the representation. A test phase maps
+            any task $(Q,R)$, given explicitly or through reward labels, to a gain. The test phase uses either a
+            data-free policy iteration or, with no iteration, successor-feature generalized policy improvement
+            (GPI). We prove three guarantees. With noise-free persistently exciting data, the returned gains equal
+            the Riccati-optimal gains for all tasks simultaneously. The GPI policy is exponentially stabilizing
+            and no worse than any library policy. Under sub-Gaussian process noise, the following holds with
+            probability $1-\delta$ and uniformly over a compact task set: the gains are stabilizing, and their
+            relative suboptimality is $O\!\big(\sigma_w\sqrt{\log(1/\delta)/(N\lambda_{\mathrm{PE}})}\big)$. Here
+            $N$ is the number of samples and $\lambda_{\mathrm{PE}}$ is the persistency-of-excitation level. A
+            certificate computed from data verifies stability and suboptimality for each task. The framework
+            extends to continuous-time systems through an integral-data Gram representation and a data-free
+            Kleinman iteration. On the unstable batch reactor, simulations confirm exactness to machine precision
+            over 200 random tasks and the predicted sample complexity. The test-time cost per task stays at
+            $0.4\,$ms for every data length, whereas per-task off-policy Q-learning takes $14$&ndash;$359\,$ms.
           </p>
         </details>
       </div>
@@ -98,28 +114,28 @@
         <div class="fact">
           <div class="num">01</div>
           <div class="big">Exact structured successor features</div>
-          <div class="small">Every linear policy's successor features are exact quadratic forms; the map from a task $(Q,R)$ to its Q-function kernel is a closed-form, task-linear operator $\mathcal{L}_K$ &mdash; no neural approximation.</div>
+          <div class="small">The successor features of every linear policy are exact quadratic forms. The map from a task $(Q,R)$ to its Q-function kernel is a closed-form, task-linear operator $\mathcal{L}_K$. Nothing here is approximated by a network.</div>
         </div>
         <div class="fact">
           <div class="num">02</div>
           <div class="big">Two-phase zero-shot algorithm</div>
-          <div class="small">An offline phase compresses reward-free trajectories into a fixed-size representation; test time maps any task to a gain via data-free policy iteration (Mode PI) or zero-iteration SF-GPI (Mode GPI).</div>
+          <div class="small">An offline phase compresses reward-free trajectories into a fixed-size representation. The test phase then maps any task to a gain, either by data-free policy iteration (Mode PI) or by zero-iteration SF-GPI (Mode GPI).</div>
         </div>
         <div class="fact">
           <div class="num">03</div>
           <div class="big">Provable guarantees</div>
-          <div class="small">Noise-free PE data give exactly Riccati-optimal gains for all tasks at once; SF-GPI is exponentially stabilizing; sub-Gaussian noise gives a uniform, data-computable suboptimality certificate.</div>
+          <div class="small">Noise-free persistently exciting (PE) data give exactly Riccati-optimal gains for all tasks at once. SF-GPI is exponentially stabilizing. Under sub-Gaussian noise, a certificate computed from data bounds the suboptimality uniformly over tasks.</div>
         </div>
         <div class="fact">
           <div class="num">04</div>
           <div class="big">Validated on an unstable batch reactor</div>
-          <div class="small">Machine-precision exactness over 200 tasks from one dataset; $0.4\,$ms test-time cost versus $14$&ndash;$359\,$ms for per-task off-policy Q-learning; a continuous-time extension.</div>
+          <div class="small">One dataset solves 200 random tasks to machine precision. The test-time cost stays at $0.4\,$ms per task, against $14$&ndash;$359\,$ms for per-task off-policy Q-learning. A continuous-time extension follows the same pattern.</div>
         </div>
       </div>
     </section>
 
     <section id="method">
-      <h2>One reward-free dataset, compressed once; any task, mapped in closed form.</h2>
+      <h2>Compress One Reward-Free Dataset, Then Map Any Task in Closed Form</h2>
       <p class="lead">
         The offline phase accumulates second moments of reward-free, off-policy trajectories and, optionally, a
         small library of successor operators for anchor tasks. At test time, any task is mapped to a stabilizing
@@ -135,24 +151,25 @@
       </figure>
 
       <div class="theorem">
-        <p class="ttitle"><i class="fas fa-shield-alt"></i> Theorem &mdash; uniform zero-shot guarantee</p>
+        <p class="ttitle"><i class="fas fa-shield-alt"></i> Theorem: Uniform Zero-Shot Guarantee</p>
         <p>
-          Under sub-Gaussian process noise, with probability at least $1-\delta$ &mdash; from a single probabilistic
-          event, with no union bound over tasks &mdash; the gains returned by Mode PI are stabilizing and their
-          relative suboptimality is bounded, uniformly over a compact task set $\mathcal{W}$, by
-          $O\!\big(\sigma_w\sqrt{\log(1/\delta)/(N\lambda_{\mathrm{PE}})}\big)$. A data-computable certificate,
-          evaluated from the representation alone, verifies stability and suboptimality for each individual task.
+          Assume sub-Gaussian process noise. Then the following holds with probability at least $1-\delta$,
+          uniformly over a compact task set $\mathcal{W}$: the gains returned by Mode PI are stabilizing, and
+          their relative suboptimality is $O\!\big(\sigma_w\sqrt{\log(1/\delta)/(N\lambda_{\mathrm{PE}})}\big)$.
+          The statement rests on a single probabilistic event, so it needs no union bound over tasks. A
+          certificate computed from the representation alone verifies stability and suboptimality for each
+          individual task.
         </p>
       </div>
     </section>
 
     <section id="demo">
-      <h2>One dataset on a MuJoCo cart-pole, three controllers read out of it.</h2>
+      <h2>One Dataset on a MuJoCo Cart-Pole, Three Controllers Read Out of It</h2>
       <p class="lead">
         The offline phase sees the simulator once, through reward-free rollouts driven by random forces near the
-        upright equilibrium, and never touches it again. Every task $(Q,R)$ posed afterwards is turned into a gain
-        from the fixed-size representation alone, and that gain goes straight back into the nonlinear simulator.
-        No retuning, no new rollouts, no gradient steps between tasks.
+        upright equilibrium. It never touches the simulator again. Every task $(Q,R)$ posed afterwards becomes a
+        gain computed from the fixed-size representation alone, and that gain goes straight back into the
+        nonlinear simulator. No retuning, no new rollouts, and no gradient steps separate one task from the next.
       </p>
       <div class="specs">
         <span class="spec">MuJoCo 3.9</span>
@@ -165,22 +182,22 @@
       <figure class="fig">
         <img src="./images/mujoco_cartpole.gif"
           alt="Three MuJoCo cart-pole simulations side by side, each balancing the pole with a different gain read out of the same reward-free representation">
-        <figcaption><span class="fnum">Demo</span>Same reward-free dataset, three different performance indices. Task&nbsp;2 weights cart position heavily and returns to the centre mark first; task&nbsp;3 buys a faster upright recovery with cheap control effort. Each gain is produced in about half a millisecond, with no access to the simulator or the data.</figcaption>
+        <figcaption><span class="fnum">Demo</span>One reward-free dataset, three different performance indices. Task&nbsp;2 weights cart position heavily, so it returns to the centre mark first. Task&nbsp;3 buys a faster upright recovery with cheap control effort. Each gain takes about half a millisecond to compute, and uses neither the simulator nor the data.</figcaption>
       </figure>
 
       <figure class="fig" style="margin-top:26px">
         <img src="./images/mujoco_cartpole.png"
           alt="Three panels: pole angle and cart position for the three tasks in closed loop, and a histogram of the relative gain error over 200 random tasks">
-        <figcaption><span class="fnum">Fig. 3</span>(a) closed loop in the nonlinear simulator, against the uncontrolled fall; (b) the three tasks separate in how hard they pull the cart back to the centre; (c) over 200 random tasks drawn from the same representation, the zero-shot gain stays within $1.4\times10^{-3}$ relative error of the Riccati gain of MuJoCo's own finite-difference linearisation &mdash; which the algorithm never sees.</figcaption>
+        <figcaption><span class="fnum">Fig. 3</span>(a) the closed loop in the nonlinear simulator, next to the uncontrolled fall. (b) the three tasks separate in how hard they pull the cart back to the centre. (c) over 200 random tasks read out of the same representation, the zero-shot gain stays within $1.4\times10^{-3}$ relative error of the Riccati gain of MuJoCo's own finite-difference linearisation, which the algorithm never sees.</figcaption>
       </figure>
     </section>
 
     <section id="results">
-      <h2>Machine-precision exactness, constant test-time cost, robust finite-sample rates.</h2>
+      <h2>Machine-Precision Exactness, Constant Test-Time Cost, Predicted Sample Complexity</h2>
       <p class="lead">
-        A single reward-free dataset solves 200 random LQR tasks to machine precision; SF-GPI closes most of the
-        optimality gap with no test-time equation solving; and the predicted $1/N$ sample-complexity rate is
-        confirmed across three excitation levels.
+        A single reward-free dataset solves 200 random LQR tasks to machine precision. SF-GPI closes most of the
+        optimality gap without solving any equation at test time. The predicted $1/N$ sample-complexity rate
+        holds across three excitation levels.
       </p>
       <div class="specs">
         <span class="spec">Rosenbrock batch reactor</span>
@@ -212,7 +229,7 @@
       </div>
 
       <div class="data-table">
-        <p class="tlabel"><strong>Table 1</strong> &mdash; per-task test-time cost vs. per-task off-policy Q-learning on the same reward-free data (mean over 20 tasks)</p>
+        <p class="tlabel"><strong>Table 1.</strong> Per-task test-time cost against per-task off-policy Q-learning on the same reward-free data (mean over 20 tasks)</p>
         <table class="tv">
           <thead><tr><th>N</th><th>Offline (ms)</th><th>Zero-shot (ms)</th><th>Off-policy QL (ms)</th></tr></thead>
           <tbody>
@@ -223,13 +240,13 @@
         </table>
       </div>
       <p class="table-note">
-        The zero-shot test-time cost stays flat at $\sim\!0.4\,$ms as $N$ grows $25\times$, while per-task
-        off-policy Q-learning on the same data grows linearly with $N$; the two methods return the same gains to
-        within $2.2\times10^{-13}$&ndash;$1.4\times10^{-12}$.
+        The zero-shot test-time cost stays flat at $\sim\!0.4\,$ms as $N$ grows $25\times$. Per-task off-policy
+        Q-learning on the same data grows linearly with $N$. Both methods return the same gains, to within
+        $2.2\times10^{-13}$&ndash;$1.4\times10^{-12}$.
       </p>
 
       <div class="data-table">
-        <p class="tlabel"><strong>Table 2</strong> &mdash; task inference from noisy reward labels instead of $(Q,R)$ (50 tasks, $N=1000$)</p>
+        <p class="tlabel"><strong>Table 2.</strong> Task inference from noisy reward labels instead of $(Q,R)$ (50 tasks, $N=1000$)</p>
         <table class="tv">
           <thead><tr><th>Label noise</th><th>Median weight error</th><th>Median subopt.</th><th>Worst subopt.</th></tr></thead>
           <tbody>
@@ -241,9 +258,9 @@
         </table>
       </div>
       <p class="table-note">
-        Noise-free labels identify the task weights exactly; even $1\%$ label noise leaves the median suboptimality
-        at $4.6\times10^{-5}$ &mdash; the LQR solution is insensitive to moderate weight errors, so reward-label
-        task specification is practical.
+        Noise-free labels identify the task weights exactly. Even $1\%$ label noise leaves the median suboptimality
+        at $4.6\times10^{-5}$, because the LQR solution tolerates moderate weight errors. Specifying a task by
+        reward labels is therefore practical.
       </p>
     </section>
 
