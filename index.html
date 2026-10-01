@@ -259,6 +259,33 @@
           alt="Four panels: the flown circle for three trackers, position error over time, RMS error against measurement noise for three gains, and RMS error against path speed with the reference tilt annotated">
         <figcaption><span class="fnum">Fig. 5</span>(a) and (b) a 6 s lap, where the three trackers reach $0.12$, $0.81$ and $1.92\,$cm RMS. (c) a high gain buys accuracy and pays for it in sensitivity to measurement noise. The tight tracker has $\|K\|=32$ against $2$ for the thrifty one, and its $16\times$ advantage in accuracy shrinks as $\sigma_m$ grows, until all three land within $6\%$ of each other at $\sigma_m=0.1$ ($3.7$ to $3.9\,$cm). (d) the tight tracker against path speed, annotated with the reference tilt. The error stays below $0.5\,$cm up to about $15^\circ$ of tilt and then grows quickly. The hover model is a local one, and this panel shows where its range ends. Past about $60^\circ$ the reference is not feasible for it at all.</figcaption>
       </figure>
+
+      <h3 style="margin-top:38px">Ballbot</h3>
+      <p class="lead">
+        A ballbot balances on a single ball, so it is unstable in two directions at once and every input
+        couples a translation to a tilt: the motor pushes the ball one way and the trunk the other. The ball rolls
+        without slipping, which ties its spin to its position. The model therefore treats it as a point of
+        effective mass $m_b + I_b/r^2$ and loads the ball and the trunk through a tendon actuator, with the
+        reaction torque on the trunk. The state has 8 dimensions and there are 2 inputs.
+      </p>
+      <div class="specs">
+        <span class="spec">ballbot, n = 8, m = 2</span>
+        <span class="spec">50 Hz</span>
+        <span class="spec">18000 reward-free samples</span>
+        <span class="spec">1.1 ms / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_ballbot.gif"
+          alt="Three MuJoCo ballbots side by side, each recovering from an off-centre lean with a different gain read out of the same reward-free representation">
+        <figcaption><span class="fnum">Demo</span>One reward-free dataset, three performance indices. The robot starts off-centre and leaning in both directions, and each gain brings it back upright over the mark on the floor. Task&nbsp;2 weights position heavily and returns closest to the origin. The ball is redrawn rolling by the distance it has travelled.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_ballbot.png"
+          alt="Three panels: trunk tilt for the three tasks in closed loop next to the uncontrolled fall, the path of the ball on the floor, and a histogram of the relative gain error over 200 random tasks">
+        <figcaption><span class="fnum">Fig. 6</span>(a) the trunk tilt in the nonlinear simulator, next to the uncontrolled fall. (b) the path of the ball on the floor for the three tasks. (c) over 200 random tasks read out of the same representation the median relative gain error is $7.8\times10^{-3}$ and the worst is $2.0\times10^{-2}$, against the Riccati gain of MuJoCo's own finite-difference linearisation. The identified model is within $3.6\times10^{-3}$ of it.</figcaption>
+      </figure>
     </section>
 
     <section id="results">
