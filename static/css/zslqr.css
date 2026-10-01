@@ -57,7 +57,12 @@ section { scroll-margin-top: calc(var(--nav-h) + 14px); }
 @media (max-width: 700px) { #topnav .nl { display: none; } }
 
 /* ---------- Hero (centered lockup, no video — static variant) ---------- */
-.hero { padding: calc(var(--nav-h) + 64px) 0 8px; text-align: center; }
+.hero { position: relative; isolation: isolate; overflow: hidden; padding: calc(var(--nav-h) + 64px) 0 8px; text-align: center; }
+/* the montage, blurred, behind the title; a light veil keeps the text readable */
+.hero-bg { position: absolute; inset: -60px; width: calc(100% + 120px); height: calc(100% + 120px); object-fit: cover; filter: blur(30px) saturate(1.25); opacity: .6; z-index: -2; pointer-events: none; }
+.hero-veil { position: absolute; inset: 0; z-index: -1; background: linear-gradient(to bottom, rgba(251,251,252,.72) 0%, rgba(251,251,252,.84) 55%, var(--bg) 100%); }
+.hero-video { display: block; width: 100%; max-width: 960px; height: auto; margin: 0 auto; border-radius: 8px; border: 1px solid var(--line); background: #0d1722; box-shadow: 0 12px 40px rgba(13, 23, 34, .22); }
+@media (max-width: 700px) { .hero-bg { display: none; } }
 .hero .lockup { display: inline-flex; align-items: center; gap: .4em; font-weight: 700; font-size: 1.6em; letter-spacing: -.02em; color: var(--fg); margin-bottom: 22px; }
 .hero .lockup img { height: 1.5em; width: auto; }
 .hero .lockup .m { color: var(--accent); }
