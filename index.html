@@ -193,6 +193,18 @@
         <figcaption><span class="fnum">Fig. 3</span>(a) the closed loop in the nonlinear simulator, next to the uncontrolled fall. (b) the three tasks separate in how hard they pull the cart back to the centre. (c) over 200 random tasks read out of the same representation, the zero-shot gain stays within $1.4\times10^{-3}$ relative error of the Riccati gain of MuJoCo's own finite-difference linearisation, which the algorithm never sees.</figcaption>
       </figure>
 
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_swingup.gif"
+          alt="MuJoCo cart-pole starting hanging downward, pumping energy to swing up, then caught and balanced by the zero-shot LQR gain">
+        <figcaption><span class="fnum">Demo</span>Swing-up from the hanging position. An energy-pumping law drives the pole towards upright, and once it enters the basin of the linearisation the controller hands over to the zero-shot gain of Task&nbsp;1, read out of the same reward-free representation. The linear gain is only responsible for the catch; it takes over at 3.8&nbsp;s and holds the pole upright afterwards.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_swingup.png"
+          alt="Pole angle and cart position during swing-up, with a dashed line where the zero-shot LQR takes over">
+        <figcaption><span class="fnum">Swing-up</span>Pole angle (unwrapped) and cart position during the swing-up. The dashed line marks the hand-over to the zero-shot LQR.</figcaption>
+      </figure>
+
       <h3 style="margin-top:38px">Quadrotor at Hover</h3>
       <p class="lead">
         Hover is a harder case, and not only because the state is 12-dimensional with four inputs. The
