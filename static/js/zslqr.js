@@ -38,3 +38,11 @@
     }
   });
 })();
+
+
+// Respect "reduce motion": the header videos stay on their first frame.
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.hero video').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+  }
+})();
