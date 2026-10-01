@@ -286,6 +286,27 @@
           alt="Three panels: trunk tilt for the three tasks in closed loop next to the uncontrolled fall, the path of the ball on the floor, and a histogram of the relative gain error over 200 random tasks">
         <figcaption><span class="fnum">Fig. 6</span>(a) the trunk tilt in the nonlinear simulator, next to the uncontrolled fall. (b) the path of the ball on the floor for the three tasks. (c) over 200 random tasks read out of the same representation the median relative gain error is $7.8\times10^{-3}$ and the worst is $2.0\times10^{-2}$, against the Riccati gain of MuJoCo's own finite-difference linearisation. The identified model is within $3.6\times10^{-3}$ of it.</figcaption>
       </figure>
+
+      <h3 style="margin-top:38px">Ballbot on a Circle</h3>
+      <p class="lead">
+        The ballbot also tracks a path, again with no new data and no new theory. The error around a feasible
+        reference follows the same linear system, so the gain read out of the same representation closes the loop
+        on the error. The reference itself, including the trunk lean that a steady turn demands, comes from the
+        identified model: for a circle it solves one square complex system. Nothing in the loop touches the
+        simulator or the data after the offline phase.
+      </p>
+
+      <figure class="fig">
+        <img src="./images/mujoco_ballbot_traj.gif"
+          alt="Three MuJoCo ballbots side by side, each rolling around the same dotted circle with a different tracking gain read out of the same reward-free representation">
+        <figcaption><span class="fnum">Demo</span>Three ballbots rolling the same circle, leaning into the turn. The clip uses a 3.5&nbsp;s lap so the lean and the differences between the trackers are visible. The tight tracker stays on the dotted line, and the other two drift a little off it.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_ballbot_traj.png"
+          alt="Four panels: the circle flown by three trackers, position error over time, RMS error against measurement noise for three gains, and RMS error against path speed with the reference tilt annotated">
+        <figcaption><span class="fnum">Fig. 7</span>(a) and (b) a 6 s lap of radius 0.6 m, where the three trackers reach $0.34$, $1.48$ and $2.56\,$cm RMS. The reference leans the trunk by $4.7^\circ$. (c) the same lap with noise on the measured state. Every tracker degrades and the ordering does not change, with the tight tracker at $10\,$cm and the thriftiest at $72\,$cm when $\sigma_m=0.1$. (d) the tight tracker against path speed, annotated with the reference tilt. The error grows from $0.23\,$cm at $0.31\,$m/s to $2.9\,$cm at $1.9\,$m/s, where the reference leans $27^\circ$ and the linear model is stretched.</figcaption>
+      </figure>
     </section>
 
     <section id="results">
