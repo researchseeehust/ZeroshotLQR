@@ -425,6 +425,34 @@
           alt="Three panels: pelvis tilt change after the push for the three tasks and the uncontrolled fall, the norm of the feedback torque, and the largest push each gain holds">
         <figcaption><span class="fnum">Fig. 11</span>(a) the pelvis tilt after the push. (b) the feedback torque. (c) the largest push each gain holds, on a grid of $5$, $10$, $20\,$N and up: all three gains and the finite-difference Riccati gain hold $10\,$N and none holds $20\,$N. Without a push the balance gain stays on the set-point for $10\,$s. The gains are within $0.09$ and $0.12$ of the Riccati gain for balance and save torque. For posture first the Riccati solver fails, so there is no reference. For the balance task and a $10\,$N push the zero-shot gain and the Riccati gain behave alike: the tilt peaks at $1.1^\circ$ against $1.0^\circ$, is at $0.29^\circ$ against $0.16^\circ$ after $2\,$s, and is back within $0.01^\circ$ by $5\,$s. A single narrow foot gives much less margin than two feet.</figcaption>
       </figure>
+
+      <h3 style="margin-top:38px">Unitree Go1 Quadruped</h3>
+      <p class="lead">
+        The last case is a quadruped, the Unitree Go1, one of the robots of the legged_control stack, standing on four
+        feet. Here the gain acts at the torque level: the 12 joint motors are plain torque sources, with the reflected
+        rotor inertia as joint armature and contacts only between the feet or body and the floor. The controllers of
+        legged_control themselves, the OCS2 NMPC and the whole-body controller, are not used. The state has 36
+        dimensions. Four feet on the floor make the stance statically stable, so the set-point comes from inverse
+        dynamics and a few Newton steps, and the finite-difference model is easy to match. The model error is
+        $3.2\times10^{-3}$ with $40000$ samples, and a gain takes about $0.1\,$s to read out.
+      </p>
+      <div class="specs">
+        <span class="spec">Unitree Go1, n = 36, m = 12</span>
+        <span class="spec">500 Hz</span>
+        <span class="spec">40000 reward-free samples</span>
+        <span class="spec">about 0.1 s / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_go1.gif"
+          alt="Four Unitree Go1 quadrupeds after an 80 N forward push on the trunk; the uncontrolled one collapses and the three with zero-shot gains stay standing">
+        <figcaption><span class="fnum">Demo</span>An 80&nbsp;N forward push on the trunk for 0.1&nbsp;s, drawn as the arrow, played at half speed, with the feedback torque of each of the 12 motors below. Without control the robot folds its legs and lies on the floor. The three gains, read out of the same reward-free representation, absorb the push and stay standing.</figcaption>
+      </figure>
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_go1.png"
+          alt="Three panels: trunk height after the push for the three tasks and the uncontrolled collapse, the norm of the feedback torque, and a histogram of the relative gain error over random tasks">
+        <figcaption><span class="fnum">Fig. 12</span>(a) the trunk height after the push. The trunk tilt would not show the collapse, because the uncontrolled robot ends up flat and level. (b) the feedback torque. (c) the relative gain error over $78$ random tasks that both solvers handle, with a median of $2.3\times10^{-2}$ and a heavy tail, up to $0.69$ for the worst. For the three named tasks it is $2.7$, $3.6$ and $2.9\times10^{-2}$, and the gain is read out in $6$ to $8$ policy-iteration steps. Pushes of $0.1\,$s that each gain absorbs, forward and sideways: the balance gain $80$ and $60\,$N, exactly what the finite-difference Riccati gain does, posture first $150$ and $80\,$N, and save torque $80$ and $20\,$N. The thriftiest gain gives up first, as on the G1.</figcaption>
+      </figure>
     </section>
 
     <section id="results">
