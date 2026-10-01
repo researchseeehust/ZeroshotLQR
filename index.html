@@ -36,9 +36,6 @@
   </nav>
 
   <header class="hero" id="top">
-    <video class="hero-bg" src="./images/hero_montage.mp4" autoplay muted loop playsinline preload="auto"
-      aria-hidden="true" tabindex="-1"></video>
-    <div class="hero-veil" aria-hidden="true"></div>
     <div class="wrap">
       <span class="lockup"><img src="./images/vinmotion_logo.jpg" alt=""> Zero&#8209;Shot<span class="m">&nbsp;LQR</span></span>
       <h1>Zero-Shot Linear Quadratic Regulation from Reward-Free Data: Structured Successor Features with Stability and Finite-Sample Guarantees</h1>
@@ -63,9 +60,14 @@
       </div>
 
       <figure class="fig hero-fig">
+        <div class="hero-stage">
+        <video class="hero-bg" src="./images/hero_montage.mp4" autoplay muted loop playsinline preload="auto"
+          aria-hidden="true" tabindex="-1"></video>
+        <div class="hero-veil" aria-hidden="true"></div>
         <video class="hero-video" src="./images/hero_montage.mp4" poster="./images/hero_poster.jpg"
           autoplay muted loop playsinline preload="auto" disablepictureinpicture
           aria-label="Montage of thirteen MuJoCo simulations: cart-pole, quadrotor, ballbot, humanoid, Unitree G1 and Go1, each controlled by gains read out of one reward-free dataset"></video>
+        </div>
         <figcaption><span class="fnum">Video</span>The same pipeline on thirteen MuJoCo simulations, from a cart-pole to a walking quadruped. In each, one reward-free dataset is collected once, and every controller shown is then read out of it for a different cost, with no further interaction. The sections below give the details of each case.</figcaption>
       </figure>
     </div>
