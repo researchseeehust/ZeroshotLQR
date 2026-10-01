@@ -334,13 +334,33 @@
       <figure class="fig">
         <img src="./images/mujoco_humanoid.gif"
           alt="Four MuJoCo humanoids balancing on the left leg after a sideways push; the uncontrolled one falls and the three with zero-shot gains stay up">
-        <figcaption><span class="fnum">Demo</span>A 15&nbsp;N lateral push on the torso for 0.1&nbsp;s. Without control the humanoid falls. The three gains, read out of the same reward-free representation with different costs, hold the pose.</figcaption>
+        <figcaption><span class="fnum">Demo</span>A 15&nbsp;N lateral push on the torso for 0.1&nbsp;s, drawn as the red arrow, played at half speed. The strip under each panel shows the feedback torque of each of the 21 motors, with blue pushing one way and orange the other. Without control the humanoid falls and the strip stays flat. The three gains, read out of the same reward-free representation with different costs, answer the push with a burst of torque at a few joints, mostly the left ankle and hip, and hold the pose.</figcaption>
       </figure>
 
       <figure class="fig" style="margin-top:26px">
         <img src="./images/mujoco_humanoid.png"
           alt="Three panels: torso tilt change after the push for the three tasks and the uncontrolled fall, distance from the centre of mass to the foot, and a histogram of the relative gain error over random tasks">
         <figcaption><span class="fnum">Fig. 8</span>(a) the torso tilt changes by at most $1.9^\circ$ for the three tasks, against a fall without control. (b) the centre of mass stays over the foot. (c) the relative gain error of $4.2$, $5.5$ and $11\times10^{-2}$ for the three tasks, and a median of $2.8\times10^{-2}$ over $81$ random tasks. The error is much larger than in the other demos, with a worst case near $1$, because the finite-difference model is a tangent at a stiff contact. The identified model is within $3.4\times10^{-2}$ of it. The tutorial-cost gain recovers from pushes up to $15\,$N, the same as the finite-difference Riccati gain, while the posture-first gain reaches $35\,$N and the torque-saving gain $20\,$N.</figcaption>
+      </figure>
+
+      <h3 style="margin-top:38px">Lifting the Leg</h3>
+      <p class="lead">
+        The humanoid can also start on both feet and lift the right leg. The one-leg pose is one end of a family of
+        equilibria: lowering the right leg toward the floor, with the rest of the body re-balanced, gives a chain of
+        rest points that ends with the right foot touching down. Each of nine waypoints is found by Newton
+        continuation from the previous one, and gets its own short reward-free dataset, its own representation and
+        its own gain for the same tutorial cost. The controller follows the chain, interpolating the reference and
+        the gain between waypoints, so the weight moves over the left leg while the foot comes up.
+      </p>
+      <figure class="fig">
+        <img src="./images/mujoco_humanoid_lift.gif"
+          alt="Two views of the MuJoCo humanoid starting on both feet and lifting the right leg, with a sideways push drawn as a red arrow during the lift and the feedback torques shown below">
+        <figcaption><span class="fnum">Demo</span>The foot rises from the floor to $0.39\,$m. A 15&nbsp;N push at 2&nbsp;s, during the lift, is drawn as the red arrow. The torque strip shows the motors answering it with a short burst, and the lift carries on.</figcaption>
+      </figure>
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_humanoid_lift.png"
+          alt="Three panels: right foot height with and without the push, norm of the feedback action, and the relative gain error at each waypoint">
+        <figcaption><span class="fnum">Fig. 9</span>(a) the foot height with and without the push, which the controller absorbs. The tilt deviates by at most $2.6^\circ$ from its final value. (b) the feedback action is small during the lift and peaks when the push lands. (c) the relative gain error at the waypoints where the finite-difference Riccati solver returns a gain: $5.5\times10^{-2}$ at the one-leg end, $6.4\times10^{-2}$ at touch-down, and $0.3$ at two waypoints near the transition. At three other waypoints the reference solver fails and is left out, and at one the identified model itself is off by $0.47$ because the foot is just touching. Reading all nine gains out takes $23\,$s in total. The family needs one dataset per waypoint, so this is gain scheduling over nine set-points. It is not a single dataset serving every pose.</figcaption>
       </figure>
     </section>
 
