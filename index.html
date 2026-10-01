@@ -388,7 +388,42 @@
       <figure class="fig" style="margin-top:26px">
         <img src="./images/mujoco_g1.png"
           alt="Three panels: pelvis tilt change after the push for the three tasks and the uncontrolled fall, the norm of the feedback torque, and a histogram of the relative gain error over random tasks">
-        <figcaption><span class="fnum">Fig. 10</span>(a) the pelvis tilt after the push. (b) the norm of the feedback torque. All three gains settle, with the torque down to about $0.01\,$Nm after $5\,$s. (c) the relative gain error over $31$ random tasks that both solvers handle, with a median of $0.17$ and a worst case of $0.20$. For the three named tasks it is $0.23$, $0.20$ and $0.26$, much larger than in the smaller demos, although the identified model is within $6.5\times10^{-3}$ of the finite-difference one. The behaviour is what counts here: the balance gain recovers from pushes up to $75\,$N, exactly what the finite-difference Riccati gain does, posture first reaches $100\,$N and save torque $25\,$N. Policy iteration stops after $6$ to $9$ steps, at a step size of $10^{-6}$. Asking for $10^{-10}$ as in the smaller demos never terminates, because the root's translation and yaw sit at an eigenvalue of $1$ to within $10^{-5}$, so the Lyapunov solves are ill conditioned and the step stalls near $10^{-8}$. The closed loop on the finite-difference model has a spectral radius of $1.00007$ for the zero-shot gain, against $0.99993$ to $1.00000$ for the Riccati gain, so it is only marginal. In the simulator the deviations nevertheless shrink over $20\,$s, and the root's position and yaw offsets fall below $2\times10^{-3}$. A gain takes about $2\,$s to read out. Standing on one leg is not shown for the G1. The Newton search did not find a single-leg rest point, and a chain of rest points that shifts the weight over one foot stopped being a set of rest points after about $7\,$cm.</figcaption>
+        <figcaption><span class="fnum">Fig. 10</span>(a) the pelvis tilt after the push. (b) the norm of the feedback torque. All three gains settle, with the torque down to about $0.01\,$Nm after $5\,$s. (c) the relative gain error over $31$ random tasks that both solvers handle, with a median of $0.17$ and a worst case of $0.20$. For the three named tasks it is $0.23$, $0.20$ and $0.26$, much larger than in the smaller demos, although the identified model is within $6.5\times10^{-3}$ of the finite-difference one. The behaviour is what counts here: the balance gain recovers from pushes up to $75\,$N, exactly what the finite-difference Riccati gain does, posture first reaches $100\,$N and save torque $25\,$N. Policy iteration stops after $6$ to $9$ steps, at a step size of $10^{-6}$. Asking for $10^{-10}$ as in the smaller demos never terminates, because the root's translation and yaw sit at an eigenvalue of $1$ to within $10^{-5}$, so the Lyapunov solves are ill conditioned and the step stalls near $10^{-8}$. The closed loop on the finite-difference model has a spectral radius of $1.00007$ for the zero-shot gain, against $0.99993$ to $1.00000$ for the Riccati gain, so it is only marginal. In the simulator the deviations nevertheless shrink over $20\,$s, and the root's position and yaw offsets fall below $2\times10^{-3}$. A gain takes about $2\,$s to read out. Standing on one leg is the next case. Moving from two feet to one is not shown: a chain of rest points that shifts the weight over one foot stopped being a set of rest points after about $7\,$cm.</figcaption>
+      </figure>
+
+      <h3 style="margin-top:38px">Unitree G1 on One Leg</h3>
+      <p class="lead">
+        My first attempt to find a single-leg rest point failed for a reason in the search, not in the robot. A Newton
+        search that starts from the two-leg stance has to lift the right foot, and at lift-off the contact switches
+        off, so the one-step velocity that the search tries to drive to zero is not smooth there. It stalled at a
+        residual of about $10^{-1}$ whatever the target. The set-point is now built in three steps. First a smooth
+        kinematic problem places the centre of mass over the left foot, with that foot fixed and flat and the right leg
+        lifted. Then inverse dynamics gives the standing height and the torques. Then Newton steps on pose and torque
+        remove what is left, from $2\times10^{-3}$ down to $8\times10^{-8}$. The result has the right foot $34\,$cm above
+        the left, the centre of mass $3.8\,$cm from the left foot's centre and the pelvis tilted $16^\circ$.
+      </p>
+      <p class="lead">
+        The offline data need smaller excitation than on two feet. With the two-leg amplitudes the identified model is
+        off by $1.7\times10^{-2}$, which is enough for the save-torque gain to destabilise the real system: it falls
+        after a $3\,$N push and the closed-loop spectral radius is $1.0004$. At a tenth of the amplitude the model
+        error is $2.0\times10^{-3}$ and all three gains hold. A gain that spends little torque has less margin to
+        absorb model error, and a loop this close to the edge leaves very little.
+      </p>
+      <div class="specs">
+        <span class="spec">G1 on the left leg, n = 70, m = 29</span>
+        <span class="spec">40000 reward-free samples</span>
+        <span class="spec">about 2 s / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_g1_single.gif"
+          alt="Four Unitree G1 robots standing on the left leg with the right leg raised, after a 10 N sideways push; the uncontrolled one falls and the three with zero-shot gains hold">
+        <figcaption><span class="fnum">Demo</span>A 10&nbsp;N lateral push on the pelvis for 0.1&nbsp;s, drawn as the arrow, played at half speed, with the feedback torque of each motor below. Without control the robot falls, and the three zero-shot gains hold the pose on one foot.</figcaption>
+      </figure>
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_g1_single.png"
+          alt="Three panels: pelvis tilt change after the push for the three tasks and the uncontrolled fall, the norm of the feedback torque, and the largest push each gain holds">
+        <figcaption><span class="fnum">Fig. 11</span>(a) the pelvis tilt after the push. (b) the feedback torque. (c) the largest push each gain holds, on a grid of $5$, $10$, $20\,$N and up: all three gains and the finite-difference Riccati gain hold $10\,$N and none holds $20\,$N. Without a push the balance gain stays on the set-point for $10\,$s. The gains are within $0.09$ and $0.12$ of the Riccati gain for balance and save torque. For posture first the Riccati solver fails, so there is no reference. For the balance task and a $10\,$N push the zero-shot gain and the Riccati gain behave alike: the tilt peaks at $1.1^\circ$ against $1.0^\circ$, is at $0.29^\circ$ against $0.16^\circ$ after $2\,$s, and is back within $0.01^\circ$ by $5\,$s. A single narrow foot gives much less margin than two feet.</figcaption>
       </figure>
     </section>
 
