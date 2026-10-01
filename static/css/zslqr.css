@@ -145,8 +145,13 @@ table.tv td.best { text-decoration: underline; text-decoration-thickness: 2px; t
 /* ---------- Footer ---------- */
 footer.wrap { color: var(--muted); font-size: .9em; padding: 30px 24px 60px; border-top: 1px solid var(--line); margin-top: 50px; display: flex; align-items: center; gap: .5em; }
 footer.wrap img { height: 18px; width: auto; }
+footer.wrap img + img { height: 24px; margin-left: .2em; }
 
 @media (max-width: 640px) {
   .stat-strip { grid-template-columns: repeat(2, 1fr); }
   .hero { padding-top: calc(var(--nav-h) + 40px); }
 }
+
+.hero .affil-logos { display: flex; align-items: center; justify-content: center; gap: 28px; margin: -8px auto 26px; }
+.hero .affil-logos img { height: 52px; width: auto; border-radius: 4px; }
+@media (max-width: 600px) { .hero .affil-logos img { height: 40px; } }
