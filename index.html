@@ -492,6 +492,34 @@
           alt="Three panels: trunk height while walking after the push for the torque tape alone and for the three gains, the norm of the feedback torque, and the one-step model error against finite differences at every phase of the gait">
         <figcaption><span class="fnum">Fig. 13</span>(a) the trunk height over $8\,$s of walking, with the push at $1\,$s. (b) the feedback torque, which dies away after the push. (c) the one-step model of each phase against the finite-difference one: median $2.3\times10^{-3}$, $95\%$ of phases below $9\times10^{-3}$ and the worst $6.9\times10^{-2}$, at the touch-down steps. Without feedback the period map has a spectral radius of $19.9$. The gains are within $1.5$ to $1.8\times10^{-2}$ of the finite-difference ones in median, and $1.4\times10^{-2}$ over $30$ random diagonal tasks, with a worst case of $2.1\times10^{-2}$. Each task takes $0.2\,$s. Pushes of $0.1\,$s at $1\,$s that the walk survives for $8\,$s, sideways and forward: the tight gain $150$ and $200\,$N, the smooth one $60$ and $200\,$N, the thrifty one $60$ and $100\,$N. The finite-difference gains give $150$ and $200$, $100$ and $60$, and $60$ and $100\,$N, and so the zero-shot gains match them for two tasks and differ in opposite directions for the third. The PD gait alone holds $60\,$N sideways and $200\,$N forward, so the tight gain is stronger sideways. The gait and its speed are fixed by the foot trajectories. The gain keeps the robot on the orbit, and it does not choose where to walk.</figcaption>
       </figure>
+
+      <h3 style="margin-top:38px">Go1 on a Circle</h3>
+      <p class="lead">
+        Walking along a path needs a reference that follows it. The simplest path that is still periodic is a circle: a
+        steady turn is a limit cycle, once the state is seen from the circle. The trot tape gets longer strokes on the
+        outside legs, the PD loop settles on an orbit with a constant yaw rate of $0.39\,$rad/s at $0.29\,$m/s, a circle
+        of radius $0.74\,$m that takes $16\,$s to walk, and after one gait period of $0.4\,$s the whole state is the start
+        state rotated about the centre of the circle. Everything else is as in the straight walk, with two changes that the turn needs.
+        The root's position now stays in the state and gets a weight in the cost, since it is what brings the robot back to the
+        circle after a push. And the measured state is rotated back about the centre by the angle that the reference has turned,
+        so that the error is the one of the first period, for which the models were learned.
+      </p>
+      <div class="specs">
+        <span class="spec">Go1 trot on a circle, n = 36, m = 12</span>
+        <span class="spec">200 phases x 400 samples</span>
+        <span class="spec">0.7 s / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_go1_circle.gif"
+          alt="Top view of three Go1 quadrupeds trotting around a dotted circle after a 60 N sideways push at 3 s; the PD gait alone ends up on a displaced circle and the two with zero-shot gains return to the dotted circle">
+        <figcaption><span class="fnum">Demo</span>Three robots trot around the dotted circle and take a 60&nbsp;N sideways push on the trunk at 3&nbsp;s. The PD gait alone, on the left, goes on around a displaced circle. The two with zero-shot gains, for the tight and the thrifty cost, walk back onto the dotted one.</figcaption>
+      </figure>
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_go1_circle.png"
+          alt="Three panels: the path of the PD gait alone and of the tight gain after the push against the circle, the distance from the circle over time for the PD gait and the three gains, and the one-step model error against finite differences at every phase">
+        <figcaption><span class="fnum">Fig. 14</span>(a) the path after a $60\,$N push. (b) the distance from the circle. The PD gait ends up on a circle displaced by about $10\,$cm and never comes back, so its distance swings by $\pm12\,$cm over each lap. The tight gain is back within $3\,$cm after about $7\,$s, the thrifty one after about $6\,$s and the smooth one after about $10\,$s with a small overshoot. (c) the one-step model of each phase against the finite-difference one: median $2.6\times10^{-3}$, $95\%$ of phases below $8\times10^{-3}$, and one phase, the touch-down at $0.37\,$s, at $7.8$. The gains are within $2.3$, $4.3$ and $4.0\times10^{-2}$ of the finite-difference ones in median, and $5.3\times10^{-2}$ over $30$ random tasks with a worst case of $7.5\times10^{-2}$, a little worse than on the straight walk. Each task takes $0.7\,$s. Replaying the torques without feedback falls after $0.6\,$s. Pushes of $0.1\,$s at $3\,$s that the robot survives and returns from, sideways and forward: tight $100$ and $150\,$N, smooth $60$ and $60\,$N, thrifty $60$ and $60\,$N. The finite-difference gains give $100$ and $150$, $60$ and $60$, and $100$ and $60\,$N. The PD gait alone stays up to $60$ and $150\,$N but returns to the circle after none of them, since nothing in it measures where the circle is.</figcaption>
+      </figure>
     </section>
 
     <section id="results">
