@@ -4,7 +4,7 @@ Project page for:
 
 **Zero-Shot Linear Quadratic Regulation from Reward-Free Data: Structured Successor Features with Stability and Finite-Sample Guarantees**
 
-Authors: Quang Huy Dao, Khanh Thai, Phuong Nam Dao (HUST, Vietnam)
+Authors: Huy Dao, Khanh Thai, Bao Le (VinMotion, Vietnam)
 
 ## Local preview
 
