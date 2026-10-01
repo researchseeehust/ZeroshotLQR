@@ -362,6 +362,34 @@
           alt="Three panels: right foot height with and without the push, norm of the feedback action, and the relative gain error at each waypoint">
         <figcaption><span class="fnum">Fig. 9</span>(a) the foot height with and without the push, which the controller absorbs. The tilt deviates by at most $2.6^\circ$ from its final value. (b) the feedback action is small during the lift and peaks when the push lands. (c) the relative gain error at the waypoints where the finite-difference Riccati solver returns a gain: $5.5\times10^{-2}$ at the one-leg end, $6.4\times10^{-2}$ at touch-down, and $0.3$ at two waypoints near the transition. At three other waypoints the reference solver fails and is left out, and at one the identified model itself is off by $0.47$ because the foot is just touching. Reading all nine gains out takes $23\,$s in total. The family needs one dataset per waypoint, so this is gain scheduling over nine set-points. It is not a single dataset serving every pose.</figcaption>
       </figure>
+
+      <h3 style="margin-top:38px">Unitree G1</h3>
+      <p class="lead">
+        The same pipeline runs on the Unitree G1, a 29-joint humanoid driven by joint torques, standing on both
+        feet. The state has 70 dimensions and there are 29 torque inputs. Two details matter. The standing pose from
+        inverse dynamics is not a rest point and the starting guess is far enough off that a plain Newton step
+        diverges, so the set-point is refined with a trust region and a line search. And the model's joint dry friction
+        has to go: a friction-loss constraint locks a joint at rest, so no small perturbation moves it and the
+        linearisation sees no input at all. The offline data are short random-torque episodes around the set-point.
+      </p>
+      <div class="specs">
+        <span class="spec">Unitree G1, n = 70, m = 29</span>
+        <span class="spec">500 Hz</span>
+        <span class="spec">40000 reward-free samples</span>
+        <span class="spec">about 10 s / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_g1.gif"
+          alt="Four Unitree G1 robots standing after a 75 N sideways push; the uncontrolled one falls, two of the three with zero-shot gains hold and the thriftiest one falls later">
+        <figcaption><span class="fnum">Demo</span>A 75&nbsp;N lateral push on the pelvis for 0.1&nbsp;s, drawn as the arrow, played at half speed, with the feedback torque of each of the 29 motors below. Without control the robot falls. The balance and posture-first gains hold. The save-torque gain, which penalises torque three times as much, holds for a moment and then falls.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_g1.png"
+          alt="Three panels: pelvis tilt change after the push for the three tasks and the uncontrolled fall, the norm of the feedback torque, and a histogram of the relative gain error over random tasks">
+        <figcaption><span class="fnum">Fig. 10</span>(a) the pelvis tilt after the push. (b) the norm of the feedback torque: the thrifty gain ends up asking for far more once it starts to lose the pose. (c) the relative gain error over $31$ random tasks that both solvers handle, with a median of $0.17$ and a worst case of $0.20$. For the three named tasks it is $0.23$, $0.20$ and $0.26$, much larger than in the smaller demos, although the identified model is within $6.5\times10^{-3}$ of the finite-difference one. The behaviour is what counts here: the balance gain recovers from pushes up to $75\,$N, exactly what the finite-difference Riccati gain does, posture first reaches $100\,$N and save torque $25\,$N. A gain takes about $10\,$s to read out, because the Lyapunov solves are at size $99$. Standing on one leg is not shown for the G1. The Newton search did not find a single-leg rest point, and a chain of rest points that shifts the weight over one foot stopped being a set of rest points after about $7\,$cm.</figcaption>
+      </figure>
     </section>
 
     <section id="results">
