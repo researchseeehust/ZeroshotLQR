@@ -60,10 +60,11 @@ section { scroll-margin-top: calc(var(--nav-h) + 14px); }
 .hero { position: relative; isolation: isolate; overflow: hidden; padding: calc(var(--nav-h) + 64px) 0 8px; text-align: center; }
 /* the montage behind the title: only lightly blurred so that it can still be followed,
    over the top part of the header and faded into the page below it */
-.hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 820px; object-fit: cover; filter: blur(4px) saturate(1.15); z-index: -2; pointer-events: none; }
-.hero-veil { position: absolute; top: 0; left: 0; width: 100%; height: 820px; z-index: -1; background: linear-gradient(to bottom, rgba(251,251,252,.28) 0%, rgba(251,251,252,.42) 45%, rgba(251,251,252,.8) 85%, var(--bg) 100%); }
-.hero .lockup, .hero h1, .hero .tag, .hero .authors, .hero .affiliations { text-shadow: 0 0 10px rgba(255,255,255,.95), 0 0 3px rgba(255,255,255,.9); }
-.hero .tag, .hero .affiliations { color: #2a2f3a; }
+.hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 820px; object-fit: cover; filter: saturate(1.1); z-index: -2; pointer-events: none; }
+.hero-veil { position: absolute; top: 0; left: 0; width: 100%; height: 820px; z-index: -1; background: linear-gradient(to bottom, rgba(251,251,252,.10) 0%, rgba(251,251,252,.18) 50%, rgba(251,251,252,.7) 88%, var(--bg) 100%); }
+.hero .lockup, .hero h1, .hero .tag, .hero .authors, .hero .affiliations { text-shadow: 0 0 14px rgba(255,255,255,1), 0 0 6px rgba(255,255,255,1), 0 0 2px rgba(255,255,255,1); }
+.hero .tag, .hero .affiliations { color: #151922; font-weight: 500; }
+.hero h1, .hero .lockup, .hero .authors a { color: #0b0e14; }
 .hero-video { display: block; width: 100%; max-width: 960px; height: auto; margin: 0 auto; border-radius: 8px; border: 1px solid var(--line); background: #0d1722; box-shadow: 0 12px 40px rgba(13, 23, 34, .22); }
 @media (max-width: 700px) { .hero-bg { display: none; } }
 .hero .lockup { display: inline-flex; align-items: center; gap: .4em; font-weight: 700; font-size: 1.6em; letter-spacing: -.02em; color: var(--fg); margin-bottom: 22px; }
