@@ -307,6 +307,41 @@
           alt="Four panels: the circle flown by three trackers, position error over time, RMS error against measurement noise for three gains, and RMS error against path speed with the reference tilt annotated">
         <figcaption><span class="fnum">Fig. 7</span>(a) and (b) a 6 s lap of radius 0.6 m, where the three trackers reach $0.34$, $1.48$ and $2.56\,$cm RMS. The reference leans the trunk by $4.7^\circ$. (c) the same lap with noise on the measured state. Every tracker degrades and the ordering does not change, with the tight tracker at $10\,$cm and the thriftiest at $72\,$cm when $\sigma_m=0.1$. (d) the tight tracker against path speed, annotated with the reference tilt. The error grows from $0.23\,$cm at $0.31\,$m/s to $2.9\,$cm at $1.9\,$m/s, where the reference leans $27^\circ$ and the linear model is stretched.</figcaption>
       </figure>
+
+      <h3 style="margin-top:38px">Humanoid on One Leg</h3>
+      <p class="lead">
+        The largest case follows MuJoCo's own LQR tutorial: the stock humanoid standing on its left leg, with the
+        tutorial's cost, a centre-of-mass balance term plus per-joint weights. The state is 54-dimensional, with 21
+        torque inputs, and the foot contact is stiff, so the model is far from linear at the millimetre scale. The
+        tutorial linearises the simulator and solves a Riccati equation. Here the offline phase only sees short
+        reward-free episodes of random torques around the set-point, and every task is then read out of the
+        representation. The finite-difference Riccati gain scores the result and is never used by the algorithm.
+      </p>
+      <p class="lead">
+        Two details matter. The keyframe is not quite a rest point, and without correcting that the data carry an
+        affine term the linear model cannot hold. A few Newton steps on the pose and the torques remove it. The
+        episodes also have to be short and small, four steps at about $10^{-3}$ rad, because the contact switches
+        within a millimetre of foot height. Longer, larger episodes identify the secant of a nonlinear contact
+        instead of the tangent that the gain needs.
+      </p>
+      <div class="specs">
+        <span class="spec">humanoid, n = 54, m = 21</span>
+        <span class="spec">200 Hz</span>
+        <span class="spec">32000 reward-free samples</span>
+        <span class="spec">0.3 to 2 s / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_humanoid.gif"
+          alt="Four MuJoCo humanoids balancing on the left leg after a sideways push; the uncontrolled one falls and the three with zero-shot gains stay up">
+        <figcaption><span class="fnum">Demo</span>A 15&nbsp;N lateral push on the torso for 0.1&nbsp;s. Without control the humanoid falls. The three gains, read out of the same reward-free representation with different costs, hold the pose.</figcaption>
+      </figure>
+
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_humanoid.png"
+          alt="Three panels: torso tilt change after the push for the three tasks and the uncontrolled fall, distance from the centre of mass to the foot, and a histogram of the relative gain error over random tasks">
+        <figcaption><span class="fnum">Fig. 8</span>(a) the torso tilt changes by at most $1.9^\circ$ for the three tasks, against a fall without control. (b) the centre of mass stays over the foot. (c) the relative gain error of $4.2$, $5.5$ and $11\times10^{-2}$ for the three tasks, and a median of $2.8\times10^{-2}$ over $81$ random tasks. The error is much larger than in the other demos, with a worst case near $1$, because the finite-difference model is a tangent at a stiff contact. The identified model is within $3.4\times10^{-2}$ of it. The tutorial-cost gain recovers from pushes up to $15\,$N, the same as the finite-difference Riccati gain, while the posture-first gain reaches $35\,$N and the torque-saving gain $20\,$N.</figcaption>
+      </figure>
     </section>
 
     <section id="results">
