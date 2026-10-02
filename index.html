@@ -38,7 +38,7 @@
   <header class="hero" id="top">
     <video class="hero-bg" src="./images/hero_montage.mp4" poster="./images/hero_poster.jpg" autoplay muted loop
       playsinline preload="auto" disablepictureinpicture
-      aria-label="Montage of thirteen MuJoCo simulations: cart-pole, quadrotor, ballbot, humanoid, Unitree G1 and Go1, each controlled by gains read out of one reward-free dataset"></video>
+      aria-label="Montage of fourteen MuJoCo simulations: cart-pole, quadrotor, ballbot, humanoid, Unitree G1 and Go1, each controlled by gains read out of one reward-free dataset"></video>
     <div class="hero-veil" aria-hidden="true"></div>
     <div class="wrap">
       <span class="lockup"><img src="./images/vinmotion_logo.jpg" alt=""> Zero&#8209;Shot<span class="m">&nbsp;LQR</span></span>
@@ -519,6 +519,43 @@
         <img src="./images/mujoco_go1_circle.png"
           alt="Three panels: the path of the PD gait alone and of the tight gain after the push against the circle, the distance from the circle over time for the PD gait and the three gains, and the one-step model error against finite differences at every phase">
         <figcaption><span class="fnum">Fig. 14</span>(a) the path after a $60\,$N push. (b) the distance from the circle. The PD gait ends up on a displaced circle and never comes back, so its distance swings between $-10$ and $+12\,$cm over each lap. The three gains are pushed off by $7.7$ (tight), $11.3$ (smooth) and $11.2\,$cm (thrifty), and each is back within $3\,$cm and stays there $2.0$ to $2.3\,$s after the push. The smooth one overshoots to the other side by $3.1\,$cm on the way. (c) the one-step model of each phase against the finite-difference one: median $2.6\times10^{-3}$, $95\%$ of phases below $8\times10^{-3}$, and one phase, the touch-down at $0.37\,$s, at $7.8$. The gains are within $2.3$, $4.3$ and $4.0\times10^{-2}$ of the finite-difference ones in median, and $5.3\times10^{-2}$ over $30$ random tasks with a worst case of $7.5\times10^{-2}$, a little worse than on the straight walk. Each task takes $0.7\,$s. Replaying the torques without feedback falls after $0.6\,$s. Pushes of $0.1\,$s at $3\,$s that the robot survives and returns from, sideways and forward: tight $100$ and $150\,$N, smooth $60$ and $60\,$N, thrifty $60$ and $60\,$N. The finite-difference gains give $100$ and $150$, $60$ and $60$, and $100$ and $60\,$N. The PD gait alone stays up to $60$ and $150\,$N but returns to the circle after none of them, since nothing in it measures where the circle is.</figcaption>
+      </figure>
+
+      <h3 style="margin-top:38px">Franka Panda: Carrying a Block</h3>
+      <p class="lead">
+        The manipulator is a Franka Panda with seven torque-controlled joints, so the state has 14 dimensions. A fully
+        actuated arm has a rest point at every pose, holding it takes the gravity torque, and that is what inverse
+        dynamics returns. The costs are in task space: a weight on the tool tip's position and orientation through the
+        Jacobian, plus a weight on the joints. Holding the ready pose, the model identified from $15000$ samples is within
+        $2.8\times10^{-4}$ of the finite-difference one, and the gains for three tasks are within $5.0\times10^{-3}$,
+        $1.2\times10^{-2}$ and $8.7\times10^{-3}$ of the Riccati ones, each after $9$ to $12$ policy-iteration steps in
+        about $0.1\,$s. Over $200$ random tasks the median is $2.0\times10^{-2}$ and the worst case $8.1\times10^{-2}$.
+      </p>
+      <p class="lead">
+        The harder case moves. A $1.5\,$kg block is fixed to the gripper, and the tool tip carries it along a loop that
+        lifts it, moves it over $0.5\,$m, lowers it and comes back, $8.4\,$s in all, with a stop at each corner. Every
+        pose of the path is a rest point only while the arm is still, so the reference is a trajectory: the joint angles
+        from inverse kinematics and the torque tape from inverse dynamics. Along it the offline step keeps a
+        representation every $0.05\,$s, $168$ of them with $300$ one-step transitions each, and a task is solved by the
+        periodic Riccati recursion over the loop on those representations alone, as for the quadruped's gait. The torque
+        tape alone would hold the tip to $0.05\,$cm for the first second. The mass of the block is not given to the
+        algorithm. It is in the data.
+      </p>
+      <div class="specs">
+        <span class="spec">Franka Panda, n = 14, m = 7</span>
+        <span class="spec">168 knots x 300 samples</span>
+        <span class="spec">0.5 s / task</span>
+      </div>
+
+      <figure class="fig">
+        <img src="./images/mujoco_panda.gif"
+          alt="Four Franka Panda arms carrying a block along a dotted path after a 40 N push on the hand at 3 s; the arm with the torque tape alone collapses and the three with zero-shot gains return to the path">
+        <figcaption><span class="fnum">Demo</span>The arm carries the block along the dotted loop and takes a 40&nbsp;N sideways push on the hand at 3&nbsp;s. With the torque tape alone, on the left, it collapses. The three arms with gains read out of the per-knot representations, for three different costs, come back onto the path. The strip under each arm shows the feedback torque of each of the seven joints.</figcaption>
+      </figure>
+      <figure class="fig" style="margin-top:26px">
+        <img src="./images/mujoco_panda.png"
+          alt="Three panels: the path of the tool tip of the tight gain after the push against the loop, the tip error over time for the torque tape alone and the three gains, and the one-step model error against finite differences at every knot">
+        <figcaption><span class="fnum">Fig. 15</span>(a) the tool tip of the tight gain, which swings out at the push and comes back. (b) the tip error: without feedback it goes to $1.4\,$m, and with any of the gains it returns to the sub-millimetre error of the tracking itself, about $0.5\,$mm. (c) the one-step model at each knot against the finite-difference one, between $10^{-3}$ and $5\times10^{-3}$. The periodic gains are within $6.6$, $5.6$ and $4.8\times10^{-2}$ of the finite-difference ones in median and take $0.5\,$s each. The peak tip error after a push of $20$, $40$, $60$ and $80\,$N is $42$, $84$, $126$ and $167\,$mm for the tight gain, $126$, $238$, $334$ and $415\,$mm for the smooth one and $109$, $209$, $296$ and $373\,$mm for the posture one, and the finite-difference gains give the same to within $2\%$. The error grows in proportion to the push, and the cost sets how far the arm gives way. This is a transport of a block that is held, with no grasp and no contact. The reference torque comes from the simulator's inverse dynamics, as the set-points of the other demos do.</figcaption>
       </figure>
     </section>
 
