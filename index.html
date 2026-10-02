@@ -523,7 +523,7 @@
 
       <h3 style="margin-top:38px">Franka Panda: Carrying a Block</h3>
       <p class="lead">
-        The manipulator is a Franka Panda with seven torque-controlled joints, so the state has 14 dimensions. A fully
+        The manipulator is a Franka Panda with seven torque-controlled joints, standing on a workbench with two stands under the corners of the path, so the state has 14 dimensions. A fully
         actuated arm has a rest point at every pose, holding it takes the gravity torque, and that is what inverse
         dynamics returns. The costs are in task space: a weight on the tool tip's position and orientation through the
         Jacobian, plus a weight on the joints. Holding the ready pose, the model identified from $15000$ samples is within
@@ -532,7 +532,7 @@
         about $0.1\,$s. Over $200$ random tasks the median is $2.0\times10^{-2}$ and the worst case $8.1\times10^{-2}$.
       </p>
       <p class="lead">
-        The harder case moves. A $1.5\,$kg block is fixed to the gripper, and the tool tip carries it along a loop that
+        The harder case moves. A $1.5\,$kg block is held between the fingers, rigidly fixed to the hand, and the tool tip carries it along a loop that
         lifts it, moves it over $0.5\,$m, lowers it and comes back, $8.4\,$s in all, with a stop at each corner. Every
         pose of the path is a rest point only while the arm is still, so the reference is a trajectory: the joint angles
         from inverse kinematics and the torque tape from inverse dynamics. Along it the offline step keeps a
